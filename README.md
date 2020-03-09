@@ -6,47 +6,59 @@ You'll be editing the `queries.sql` file, which consists of a series of
 "plain English" sentences.  Your job is to translate those sentences into a
 single SQL `SELECT` query.  Don't worry if you can't do it — take your best shot!
 
-The database itself is contained in the `music-store.db` file.  The `import.sql`
-file contains the raw SQL used to generate the toy database.  You don't need to
-touch this file, but it's here in case we wind up needing it.  You'll be doing
-your work in `queries.sql`.
+We've set up our own PostgreSQL server that you'll be connecting to.
 
 ## Contents
 
-1. [The Plain English Queries](#the-plain-english-queries)
-2. [Configuring Postgress](#configuring-postgress)
-3. [The Database Tables](#the-database-tables)
-  1. [Information About The Products](#information-about-the-products)
-  2. [Information About Customers and Their Orders](#information-about-customers-and-their-orders)
-  3. [Information About The Company](#information-about-the-company)
-4. [One Key Idea](#one-key-idea)
+- [Contents](#Contents)
+- [Exercises](#Exercises)
+- [PostgreSQL](#PostgreSQL)
+  - [Connecting To PostgreSQL](#Connecting-To-PostgreSQL)
+  - [Exiting The PostgreSQL Shell](#Exiting-The-PostgreSQL-Shell)
+- [The Database Tables](#The-Database-Tables)
+  - [Information About The Products](#Information-About-The-Products)
+  - [Information About Customers and Their Orders](#Information-About-Customers-and-Their-Orders)
+  - [Information About The Company](#Information-About-The-Company)
+- [One Key Idea: Normalization](#One-Key-Idea-Normalization)
+- [Useful Resources](#Useful-Resources)
 
-## The Plain English Queries
+## Exercises
 
-See the `queries.sql`.  Open the database by running this in your terminal:
+The exercises are contained in individual `.sql` files. They are meant to be completed in the following order:
 
-```bash
-psql -hadjacent-sql-practice.czdcscfribvh.us-east-2.rds-preview.amazonaws.com -Uadjacent_student adjacent_sql_exercises
+1. `queries.sql` — Basic SQL queries on a single table
+1. `group_by.sql` — Single-table queries using `GROUP BY`
+1. `join.sql` — Two-table queries using `JOIN`
+1. `left_join.sql` — Two-table queries using `LEFT JOIN`
+1. `multi_join.sql` — Queries against more than two tables simultaneously
+
+## PostgreSQL
+
+### Connecting To PostgreSQL
+
+Connect to database by running this in your terminal:
+
+```console
+psql -h sql-exercises.20bits.com -U adjacent_student adjacent_sql_exercises
 ```
+
 You will be prompted for a password. Ask your instructor for this information.
 
-Once inside, type the following at the postgress prompt
+Once inside, type the following at the PostgreSQL prompt
 
-```text
-adjacent_sql_exercises> \dt;
+```console
+adjacent_sql_exercises> \dt
 ```
 
-to list all the tables in the database.  To see the schema for a specific table,
-you can type, e.g., the `invoices` table
+to list all the tables in the database.  To see the schema for a specific table, e.g., the `invoices` table, you can use PostgreSQL's `\d` command:
 
 ```text
-adjacent_sql_exercises> \d+ invoices;
+adjacent_sql_exercises> \d invoices
 ```
 
-Don't be afraid to explore the data in the tables to get a better feeling
-for how it's formatted.  It's impossible to damage your database as long
-as you're only running `SELECT` queries.  For example, what does the data
-in the invoices table look like?  Well, let's look at a 5 rows
+If you see a colon `:` at the bottom of the screen, that means there's more to see. You can scroll up and down using the arrow keys. You can exit the scrolling interface by pressing the `q` key.
+
+Don't be afraid to explore the data in the tables to get a better feeling for how it's formatted.  It's impossible to damage your database as long as you're only running `SELECT` queries.  For example, what does the data in the invoices table look like?  Well, let's look at a 5 rows
 
 ```sql
 SELECT * FROM invoices LIMIT 5;
@@ -54,24 +66,11 @@ SELECT * FROM invoices LIMIT 5;
 
 That's what we mean by "explore."
 
-## Configuring Postgress
+### Exiting The PostgreSQL Shell
 
-The default settings for postgress can make it hard to read the output of `SELECT`
-queries.  To change the settings, run the following command once you're inside
-the Postgress shell.  You should just be able to copy and paste this line.
+When you're ready to exit the PostgreSQL shell you can press `Ctrl+D` or run the following command:
 
-```text
-\t
-```
-
-To turn this formatting on/off in postgress you can apply \t at any point while you're querying your database
-
-When selecting large amounts of data from your database you can always page down the results by pressing enter or if you want to quit viewing the selected content type in q.
-
-
-When you're ready to exit querying your database enter 
-
-```text
+```console
 \q
 ```
 
@@ -101,9 +100,9 @@ Here are the tables, organized by high-level purpose.
 
 1. `employees` contains information about our company's employees.  This is mostly used to assign support representatives to customers.
 
-## One Key Idea
+## One Key Idea: Normalization
 
-One of the key ideas in how relational databases like Postgress and MySQL organize data is that we try to minimize redundancy by using references to other data rather than duplicating that data between different tables.
+One of the key ideas in how relational databases like PostgreSQL and MySQL organize data is that we try to minimize redundancy by using references to other data rather than duplicating that data between different tables.
 
 For example, every track belongs to one (and only one) album.  An album has its own associated information, like album title, publication date, and so on.  Each track also has its own associated information, like track title, track position, and duration.  We want to be able to ask questions like "What is the title of the album on which track X appears?"
 
@@ -111,9 +110,9 @@ If you imagine a spreadsheet with a bunch of track listings, one way to achieve 
 
 This is not how we store information in a relational database.  Rather than storing album-related information in the same table as track-related information, we store album-related information in an "albums" table and track-related information in a "tracks" table.  We assign each track and album a unique ID.  In the "tracks" table we would when have an `album_id` column containing the unique album ID as a *reference* or *pointer* to the relevant row in the "albums" table.
 
-Excel can do this, but it is too cumbersome for the most common tasks.  In a relational database like Postgress or MySQL, however, it is much easier to deal with.  In fact, SQL (the language) is counting on you storing your data this way.
+Excel can do this, but it is too cumbersome for the most common tasks.  In a relational database like PostgreSQL or MySQL, however, it is much easier to deal with.  In fact, SQL (the language) is counting on you storing your data this way.
 
-### Useful Resources
+## Useful Resources
 
-- http://stackoverflow.com/questions/17946221/sql-join-and-different-types-of-joins
-- http://en.wikipedia.org/wiki/Join_(SQL)
+- <http://stackoverflow.com/questions/17946221/sql-join-and-different-types-of-joins>
+- <http://en.wikipedia.org/wiki/Join_(SQL)>
