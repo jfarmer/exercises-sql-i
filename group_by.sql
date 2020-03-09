@@ -27,29 +27,25 @@ ORDER BY avg_invoice_size DESC
 LIMIT 10;
 
 -- Sales volume and receipts by year
--- See: http://www.sqlite.org/lang_datefunc.html
--- "STRFTIME" means "string format time" and is used to format the output of
--- dates, times, and timestamps.
--- See: http://cl.ly/image/0C1m372r233t
-SELECT STRFTIME('%Y', invoice_date) AS year,
+-- See: https://www.postgresql.org/docs/12/functions-datetime.html
+SELECT EXTRACT(year from invoice_date) AS invoice_year,
        COUNT(*) AS invoice_count,
        SUM(total) AS invoice_total
 FROM invoices
-GROUP BY year
-ORDER BY year ASC;
+GROUP BY invoice_year
+ORDER BY invoice_year ASC;
 
 -- Sales volume and receipts by year and month
 -- You can group by multiple fields
 -- You can order by multiple fields (here, year first then month)
--- See: http://cl.ly/image/2e2H3w052H2o
 
-SELECT STRFTIME('%Y', invoice_date) AS year,
-       STRFTIME('%m', invoice_date) AS month,
+SELECT EXTRACT(year from invoice_date) AS invoice_year,
+       EXTRACT(month from invoice_date) AS invoice_month,
        COUNT(*) AS invoice_count,
        SUM(total) AS invoice_total
 FROM invoices
-GROUP BY year, month
-ORDER BY year ASC, month ASC;
+GROUP BY invoice_year, invoice_month
+ORDER BY invoice_year ASC, invoice_month ASC;
 
 -- A list of the top 5 US states by number of invoices
 -- Hint: You'll need to filter the results with WHERE billing_country = 'USA'
@@ -73,7 +69,7 @@ ORDER BY year ASC, month ASC;
 
 
 -- "customers" table
--- Remember: run ".schema customers" to see what fields (columns) the customers table contains.
+-- Remember: run "\d+ customers" to see what fields (columns) the customers table contains.
 
 -- A list of the top 3 countries by total number of customers
 

@@ -33,7 +33,7 @@ SELECT * FROM albums ORDER BY title DESC;
 SELECT * FROM albums WHERE title LIKE 'A%' ORDER BY title;
 
 -- "invoices" table
--- Remember: run ".schema invoices" to see the structure of the "invoices" table
+-- Remember: run "\d+ invoices" to see the structure of the "invoices" table
 
 -- Every invoice
 
@@ -59,7 +59,7 @@ SELECT * FROM invoices ORDER BY total LIMIT 10;
 -- Hint: If "=" means equal, use "!=" to mean "not equal"
 
 -- Every invoice from Chicago, IL
-SELECT * FROM invoices WHERE billing_city = "Chicago" AND billing_state = "IL" AND billing_country="USA";
+SELECT * FROM invoices WHERE billing_city = 'Chicago' AND billing_state = 'IL' AND billing_country='USA';
 
 -- A list of all the invoices worth more than $5.00 from Chicago, IL
 
@@ -71,22 +71,22 @@ SELECT * FROM invoices WHERE billing_city = "Chicago" AND billing_state = "IL" A
 
 
 -- The number of invoices from Chicago, IL
-SELECT COUNT(*) FROM invoices WHERE billing_city = "Chicago" AND billing_state = "IL" AND billing_country = "USA";
+SELECT COUNT(*) FROM invoices WHERE billing_city = 'Chicago' AND billing_state = 'IL' AND billing_country = 'USA';
 
 -- The number of invoices from the US, grouped by state
-SELECT billing_state, COUNT(*) FROM invoices WHERE billing_country = "USA" GROUP BY billing_state;
+SELECT billing_state, COUNT(*) FROM invoices WHERE billing_country = 'USA' GROUP BY billing_state;
 
 -- The state in the US with the most invoices
-SELECT billing_state, COUNT(*) FROM invoices WHERE billing_country = "USA" GROUP BY billing_state ORDER BY COUNT(*) DESC LIMIT 1;
+SELECT billing_state, COUNT(*) FROM invoices WHERE billing_country = 'USA' GROUP BY billing_state ORDER BY COUNT(*) DESC LIMIT 1;
 
 -- The total invoice value from California
-SELECT billing_state, SUM(total) FROM invoices WHERE billing_country = "USA" and billing_state = "CA";
+SELECT billing_state, SUM(total) FROM invoices WHERE billing_country = 'USA' AND billing_state = 'CA' GROUP BY billing_state;
 
 -- The number of invoices and the invoice total from California
-SELECT billing_state, COUNT(*), SUM(total) FROM invoices WHERE billing_country = "USA" and billing_state = "CA";
+SELECT billing_state, COUNT(*), SUM(total) FROM invoices WHERE billing_country = 'USA' AND billing_state = 'CA' GROUP BY billing_state;
 
 -- The count, total, and average of invoice totals from California
-SELECT billing_state, COUNT(*), SUM(total), AVG(total) FROM invoices WHERE billing_country = "USA" and billing_state = "CA";
+SELECT billing_state, COUNT(*), SUM(total), AVG(total) FROM invoices WHERE billing_country = 'USA' AND billing_state = 'CA' GROUP BY billing_state;
 
 -- The count, total, and average of invoice totals, grouped by state, ordered by average invoice total from highest-to-lowest
 

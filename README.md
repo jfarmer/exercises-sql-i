@@ -14,7 +14,7 @@ your work in `queries.sql`.
 ## Contents
 
 1. [The Plain English Queries](#the-plain-english-queries)
-2. [Configuring SQLite3](#configuring-sqlite3)
+2. [Configuring Postgress](#configuring-postgress)
 3. [The Database Tables](#the-database-tables)
   1. [Information About The Products](#information-about-the-products)
   2. [Information About Customers and Their Orders](#information-about-customers-and-their-orders)
@@ -26,20 +26,21 @@ your work in `queries.sql`.
 See the `queries.sql`.  Open the database by running this in your terminal:
 
 ```bash
-sqlite3 music-store.db
+psql -hadjacent-sql-practice.czdcscfribvh.us-east-2.rds-preview.amazonaws.com -Uadjacent_student adjacent_sql_exercises
 ```
+You will be prompted for a password. Ask your instructor for this information.
 
-Once inside, type the following at the SQLite3 prompt
+Once inside, type the following at the postgress prompt
 
 ```text
-sqlite> .schema
+adjacent_sql_exercises> \dt;
 ```
 
 to list all the tables in the database.  To see the schema for a specific table,
 you can type, e.g., the `invoices` table
 
 ```text
-sqlite> .schema invoices
+adjacent_sql_exercises> \d+ invoices;
 ```
 
 Don't be afraid to explore the data in the tables to get a better feeling
@@ -53,37 +54,26 @@ SELECT * FROM invoices LIMIT 5;
 
 That's what we mean by "explore."
 
-## Configuring SQLite3
+## Configuring Postgress
 
-The default settings for SQLite3 can make it hard to read the output of `SELECT`
-queries.  To change these settings, run the following three commands once you're inside
-the SQLite3 shell.  You should just be able to copy and paste these three lines.
+The default settings for postgress can make it hard to read the output of `SELECT`
+queries.  To change the settings, run the following command once you're inside
+the Postgress shell.  You should just be able to copy and paste this line.
 
 ```text
-.header on
-.mode column
-.width 20
+\t
 ```
 
-It should look roughly like this: http://cl.ly/image/24431S2W0I3f
+To turn this formatting on/off in postgress you can apply \t at any point while you're querying your database
 
-If you want to make these settings permanent, copy and paste the following
-command into your **terminal** (not the sqlite shell). **Note**: this will not
-work on Windows.
+When selecting large amounts of data from your database you can always page down the results by pressing enter or if you want to quit viewing the selected content type in q.
 
-```bash
-cat <<EOF > ~/.sqliterc
-.header on
-.mode column
-.width 20
-EOF
+
+When you're ready to exit querying your database enter 
+
+```text
+\q
 ```
-
-You should copy and paste all 5 lines and it should look roughly like this: http://cl.ly/image/3w1Y0l1a0W38
-
-Don't worry about what all the parts of this command are.  The short of it is
-that this is adding lines to a file named `.sqliterc`, which SQLite3 uses to
-determine its default settings.
 
 ## The Database Tables
 
@@ -113,7 +103,7 @@ Here are the tables, organized by high-level purpose.
 
 ## One Key Idea
 
-One of the key ideas in how relational databases like SQLite3 and MySQL organize data is that we try to minimize redundancy by using references to other data rather than duplicating that data between different tables.
+One of the key ideas in how relational databases like Postgress and MySQL organize data is that we try to minimize redundancy by using references to other data rather than duplicating that data between different tables.
 
 For example, every track belongs to one (and only one) album.  An album has its own associated information, like album title, publication date, and so on.  Each track also has its own associated information, like track title, track position, and duration.  We want to be able to ask questions like "What is the title of the album on which track X appears?"
 
@@ -121,7 +111,7 @@ If you imagine a spreadsheet with a bunch of track listings, one way to achieve 
 
 This is not how we store information in a relational database.  Rather than storing album-related information in the same table as track-related information, we store album-related information in an "albums" table and track-related information in a "tracks" table.  We assign each track and album a unique ID.  In the "tracks" table we would when have an `album_id` column containing the unique album ID as a *reference* or *pointer* to the relevant row in the "albums" table.
 
-Excel can do this, but it is too cumbersome for the most common tasks.  In a relational database like SQLite3 or MySQL, however, it is much easier to deal with.  In fact, SQL (the language) is counting on you storing your data this way.
+Excel can do this, but it is too cumbersome for the most common tasks.  In a relational database like Postgress or MySQL, however, it is much easier to deal with.  In fact, SQL (the language) is counting on you storing your data this way.
 
 ### Useful Resources
 
