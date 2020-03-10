@@ -36,39 +36,44 @@ SELECT * FROM albums WHERE title LIKE 'A%' ORDER BY title;
 -- Remember: run "\d+ invoices" to see the structure of the "invoices" table
 
 -- Every invoice
-
+SELECT * FROM invoices
 -- Every invoice ordered by total invoice amount ("total")
-
+SELECT * FROM invoices ORDER BY amount ASC;
 -- Every invoice with a total greater than 10
+SELECT * FROM invoices WHERE amount LIKE '>10';
 
 -- The 10 least expensive invoices
 -- Remember: ORDER BY orders from lowest-to-highest by default
 SELECT * FROM invoices ORDER BY total LIMIT 10;
 
 -- The 10 most expensive invoices
-
+SELECT * FROM invoices ORDER BY total ASC LIMIT 10;
 -- The 15 most recent invoices
-
+SELECT * FROM invoices ORDER BY recent ASC LIMIT 15;
 -- The 15 oldest invoices
+SELECT * FROM invoices ORDER BY recent LIMIT 15;
 
 -- The 10 most expensive invoices from the US
-
+SELECT * FROM incvoices WHERE origin = 'US' like 'US' ORDER BY amount ASC LIMIT 10;
 -- The 10 least expensive invoices from the US
+SELECT * FROM incvoices WHERE billing_country = 'US' ORDER BY amount LIMIT 10;
 
 -- The 10 most expensive invoices from outside the US
 -- Hint: If "=" means equal, use "!=" to mean "not equal"
+SELECT * FROM incvoices WHERE billing_country != 'US' ORDER BY amount LIMIT 10;
 
 -- Every invoice from Chicago, IL
 SELECT * FROM invoices WHERE billing_city = 'Chicago' AND billing_state = 'IL' AND billing_country='USA';
 
 -- A list of all the invoices worth more than $5.00 from Chicago, IL
+SELECT * FROM invoices WHERE billing_city = 'Chicago' AND billing_state = 'IL' AND billing_country='USA' AND amount>5;
 
 -- The billing addresses of the 5 most valuable invoices from Mountain View CA
 -- Gotta reward those big spenders!
-
+SELECT * FROM billing_adress WHERE billing_city = 'Mountain View' AND billing_state = 'CA' LIMIT 5;
 -- A list of the 10 most valuable invoices made before January 1st, 2010
 -- Hint: Dates are formatted like 'YYYY-MM-DD' and you can compare them using '<', '>', '<=' and '>='
-
+SELECT * FROM invoices ORDER BY value ASC WHERE year < 2010
 
 -- The number of invoices from Chicago, IL
 SELECT COUNT(*) FROM invoices WHERE billing_city = 'Chicago' AND billing_state = 'IL' AND billing_country = 'USA';
@@ -89,9 +94,11 @@ SELECT billing_state, COUNT(*), SUM(total) FROM invoices WHERE billing_country =
 SELECT billing_state, COUNT(*), SUM(total), AVG(total) FROM invoices WHERE billing_country = 'USA' AND billing_state = 'CA' GROUP BY billing_state;
 
 -- The count, total, and average of invoice totals, grouped by state, ordered by average invoice total from highest-to-lowest
-
+SELECT COUNT(*), SUM(total), AVG(total) FROM invoices ORDER BY average ASC GROUP BY billing_state;
 -- A list of the top 5 countries by number of invoices
-
+SELECT * FROM countries ORDER BY COUNT(invoice) ASC LIMIT 5;
 -- A list of the top 5 countries by gross/total invoice size
+SELECT * FROM countries ORDER BY SUM(invoice) ASC LIMIT 5;
 
 -- A list of the top 5 countries by average invoice size
+SELECT * FROM countries ORDER BY AVG(invoice) ASC LIMIT 5;
