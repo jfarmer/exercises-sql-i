@@ -98,7 +98,7 @@ SELECT COUNT(*), SUM(total), AVG(total) FROM invoices ORDER BY average ASC GROUP
 -- A list of the top 5 countries by number of invoices
 SELECT * FROM countries ORDER BY COUNT(invoice) ASC LIMIT 5;
 -- A list of the top 5 countries by gross/total invoice size
-SELECT * FROM countries ORDER BY SUM(invoice) ASC LIMIT 5;
 
+SELECT * FROM countries ORDER BY SUM(invoice) ASC LIMIT 5;
 -- A list of the top 5 countries by average invoice size
 SELECT * FROM countries ORDER BY AVG(invoice) ASC LIMIT 5;
