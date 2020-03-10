@@ -1,3 +1,4 @@
+
 # A Toy Database
 
 Here is a toy database which models an online music store.  In this database, we have falling into three categories: information about the company, information about customers and their orders, and information about the products being sold.

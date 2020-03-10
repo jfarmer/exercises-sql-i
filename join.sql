@@ -63,20 +63,65 @@ ORDER BY track_count DESC
 LIMIT 5;
 
 -- The top 5 genres by total track length (in milliseconds)
+SELECT genres.id, genres.name, SUM(milliseconds) AS track_total
+FROM genres
+JOIN tracks
+  ON (tracks.genre_id = genres.id)
+GROUP BY genres.id
+ORDER BY track_total DESC
+LIMIT 5;
 
 -- The top 5 genres by average track length (in milliseconds)
-
+SELECT genres.id, genres.name, AVG(milliseconds) AS track_average
+FROM genres
+JOIN tracks
+  ON (tracks.genre_id = genres.id)
+GROUP BY genres.id
+ORDER BY track_average DESC
+LIMIT 5;
 -- The top 5 albums by total track length
 -- Hint: you'll need to JOIN the albums table and the tracks table
 -- Hint: the tracks table has an album_id field
-
+SELECT albums.id, albums.title, SUM(milliseconds) AS track_length
+FROM albums
+JOIN tracks
+  ON (tracks.album_id = albums.id)
+GROUP BY albums.id
+ORDER BY track_length DESC
+LIMIT 5;
 -- The top 5 albums by average track length
+SELECT albums.id, albums.title, AVG(milliseconds) AS track_average
+FROM albums
+JOIN tracks
+  ON (tracks.album_id = albums.id)
+GROUP BY albums.id
+ORDER BY track_average DESC
+LIMIT 5;
 
 -- The top 5 albums by total album price
 -- Hint: the "tracks" table has a unit_price field, so the "price" of an album
 --       is the sum of its tracks' unit_price fields.
-
+SELECT albums.id, albums.title, SUM(unit_price) AS album_price
+FROM albums
+JOIN tracks
+  ON (tracks.album_id = albums.id)
+GROUP BY albums.id
+ORDER BY album_price DESC
+LIMIT 5;
 -- The 10 albums with the longest play-time
-
+SELECT albums.id, albums.title, SUM(milliseconds) AS play_time
+FROM albums
+JOIN tracks
+   ON(tracks.album_id = albums.id)
+GROUP BY albums.id
+ORDER BY play_time DESC
+LIMIT 10;
 -- The 10 highest-selling tracks of all time
 -- Hint: you'll need to join the tracks table and the invoice_lines table
+SELECT tracks.id, tracks.name, SUM(invoice_lines.unit_price) AS track_price
+FROM tracks
+JOIN invoice_lines
+  ON (invoice_lines.track_id = tracks.id)
+GROUP BY tracks.id
+ORDER BY track_price DESC
+LIMIT 10;
